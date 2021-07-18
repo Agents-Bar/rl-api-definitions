@@ -1,0 +1,519 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Agents Bar - Agent",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/agent": {
+            "post": {
+                "summary": "Create Agent",
+                "operationId": "create_agent_agent_post",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Model Type",
+                            "type": "string"
+                        },
+                        "name": "model_type",
+                        "in": "query"
+                    },
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Obs Size",
+                            "type": "integer"
+                        },
+                        "name": "obs_size",
+                        "in": "query"
+                    },
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Action Size",
+                            "type": "integer"
+                        },
+                        "name": "action_size",
+                        "in": "query"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Network State",
+                            "type": "string",
+                            "format": "binary"
+                        },
+                        "name": "network_state",
+                        "in": "query"
+                    },
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Buffer State",
+                            "type": "string",
+                            "format": "binary"
+                        },
+                        "name": "buffer_state",
+                        "in": "query"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "title": "Model Config",
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/agent/{agent_name}": {
+            "delete": {
+                "summary": "Delete Agent",
+                "description": "Assumption is that the service contains only one agent.",
+                "operationId": "delete_agent_agent__agent_name__delete",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Agent Name",
+                            "type": "string"
+                        },
+                        "name": "agent_name",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful Response"
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/agent/state": {
+            "get": {
+                "summary": "Get Agent State",
+                "operationId": "get_agent_state_agent_state_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AgentStateJSON"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/agent/": {
+            "get": {
+                "summary": "Get Agent Info",
+                "operationId": "get_agent_info_agent__get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AgentInfo"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/agent/last_active": {
+            "get": {
+                "summary": "Get Agent Last Active",
+                "operationId": "get_agent_last_active_agent_last_active_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "title": "Response Get Agent Last Active Agent Last Active Get",
+                                    "type": "string",
+                                    "format": "date-time"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/agent/hparams": {
+            "get": {
+                "summary": "Get Agent Hparasm",
+                "operationId": "get_agent_hparasm_agent_hparams_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/agent/loss": {
+            "get": {
+                "summary": "Get Agent Loss",
+                "operationId": "get_agent_loss_agent_loss_get",
+                "parameters": [
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Last Samples",
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "name": "last_samples",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "title": "Response Get Agent Loss Agent Loss Get",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/agent/step": {
+            "post": {
+                "summary": "Agent Step",
+                "operationId": "agent_step_agent_step_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AgentStep"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/agent/act": {
+            "post": {
+                "summary": "Agent Act",
+                "operationId": "agent_act_agent_act_post",
+                "parameters": [
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Noise",
+                            "type": "number",
+                            "default": 0.0
+                        },
+                        "name": "noise",
+                        "in": "query"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "title": "State",
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AgentAction"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AgentAction": {
+                "title": "AgentAction",
+                "required": [
+                    "action"
+                ],
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "title": "Action",
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer"
+                                }
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "AgentInfo": {
+                "title": "AgentInfo",
+                "required": [
+                    "model",
+                    "hyperparameters",
+                    "last_active"
+                ],
+                "type": "object",
+                "properties": {
+                    "model": {
+                        "title": "Model",
+                        "type": "string"
+                    },
+                    "hyperparameters": {
+                        "title": "Hyperparameters",
+                        "type": "object"
+                    },
+                    "last_active": {
+                        "title": "Last Active",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "AgentStateJSON": {
+                "title": "AgentStateJSON",
+                "required": [
+                    "model",
+                    "state_space",
+                    "action_space",
+                    "encoded_config",
+                    "encoded_network",
+                    "encoded_buffer"
+                ],
+                "type": "object",
+                "properties": {
+                    "model": {
+                        "title": "Model",
+                        "type": "string"
+                    },
+                    "state_space": {
+                        "title": "State Space",
+                        "type": "integer"
+                    },
+                    "action_space": {
+                        "title": "Action Space",
+                        "type": "integer"
+                    },
+                    "encoded_config": {
+                        "title": "Encoded Config",
+                        "type": "string"
+                    },
+                    "encoded_network": {
+                        "title": "Encoded Network",
+                        "type": "string"
+                    },
+                    "encoded_buffer": {
+                        "title": "Encoded Buffer",
+                        "type": "string"
+                    }
+                }
+            },
+            "AgentStep": {
+                "title": "AgentStep",
+                "required": [
+                    "obs",
+                    "action",
+                    "next_obs",
+                    "reward",
+                    "done"
+                ],
+                "type": "object",
+                "properties": {
+                    "obs": {
+                        "title": "Obs",
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        }
+                    },
+                    "action": {
+                        "title": "Action",
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        }
+                    },
+                    "next_obs": {
+                        "title": "Next Obs",
+                        "type": "array",
+                        "items": {
+                            "type": "number"
+                        }
+                    },
+                    "reward": {
+                        "title": "Reward",
+                        "type": "number"
+                    },
+                    "done": {
+                        "title": "Done",
+                        "type": "boolean"
+                    }
+                }
+            },
+            "HTTPValidationError": {
+                "title": "HTTPValidationError",
+                "type": "object",
+                "properties": {
+                    "detail": {
+                        "title": "Detail",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        }
+                    }
+                }
+            },
+            "ValidationError": {
+                "title": "ValidationError",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "loc": {
+                        "title": "Location",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "msg": {
+                        "title": "Message",
+                        "type": "string"
+                    },
+                    "type": {
+                        "title": "Error Type",
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

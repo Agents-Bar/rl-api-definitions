@@ -1,0 +1,347 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Agents Bar - Environment",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/env": {
+            "post": {
+                "summary": "Create Env",
+                "description": "Creates internal environment entity",
+                "operationId": "create_env_env_post",
+                "parameters": [
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Environment name",
+                            "type": "string"
+                        },
+                        "name": "env_name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/env/reset": {
+            "post": {
+                "summary": "Reset Env",
+                "description": "Reset the environment to initial position.",
+                "operationId": "reset_env_env_reset_post",
+                "parameters": [
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Seed",
+                            "type": "integer"
+                        },
+                        "name": "seed",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "title": "Response Reset Env Env Reset Post",
+                                    "anyOf": [
+                                        {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "number"
+                                            }
+                                        },
+                                        {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/env/step": {
+            "post": {
+                "summary": "Post Step",
+                "description": "Provides information necessary to step the environment.",
+                "operationId": "post_step_env_step_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EnvActionType"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EnvStepType"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/env/commit": {
+            "post": {
+                "summary": "Post Commit",
+                "description": "Commit last sent step data.",
+                "operationId": "post_commit_env_commit_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EnvStepType"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/env/last": {
+            "get": {
+                "summary": "Get Last",
+                "description": "Retrieve last provided Step data.",
+                "operationId": "get_last_env_last_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EnvStepType"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/env/seed": {
+            "post": {
+                "summary": "Set Seed",
+                "description": "Set seed for environment's random number generator.",
+                "operationId": "set_seed_env_seed_post",
+                "parameters": [
+                    {
+                        "required": true,
+                        "schema": {
+                            "title": "Seed",
+                            "type": "integer"
+                        },
+                        "name": "seed",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/env/info": {
+            "get": {
+                "summary": "Get Environment related information",
+                "operationId": "get_env_info_env_info_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "EnvActionType": {
+                "title": "EnvActionType",
+                "required": [
+                    "actions"
+                ],
+                "type": "object",
+                "properties": {
+                    "actions": {
+                        "title": "Actions",
+                        "anyOf": [
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer"
+                                }
+                            }
+                        ]
+                    },
+                    "commit": {
+                        "title": "Commit",
+                        "type": "boolean",
+                        "default": false
+                    }
+                }
+            },
+            "EnvStepType": {
+                "title": "EnvStepType",
+                "required": [
+                    "observation",
+                    "reward",
+                    "done",
+                    "info"
+                ],
+                "type": "object",
+                "properties": {
+                    "observation": {
+                        "title": "Observation",
+                        "anyOf": [
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer"
+                                }
+                            }
+                        ]
+                    },
+                    "reward": {
+                        "title": "Reward",
+                        "type": "number"
+                    },
+                    "done": {
+                        "title": "Done",
+                        "type": "boolean"
+                    },
+                    "info": {
+                        "title": "Info",
+                        "type": "object"
+                    }
+                }
+            },
+            "HTTPValidationError": {
+                "title": "HTTPValidationError",
+                "type": "object",
+                "properties": {
+                    "detail": {
+                        "title": "Detail",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        }
+                    }
+                }
+            },
+            "ValidationError": {
+                "title": "ValidationError",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "loc": {
+                        "title": "Location",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "msg": {
+                        "title": "Message",
+                        "type": "string"
+                    },
+                    "type": {
+                        "title": "Error Type",
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
