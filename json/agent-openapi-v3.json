@@ -2,71 +2,37 @@
     "openapi": "3.0.2",
     "info": {
         "title": "Agents Bar - Agent",
-        "version": "0.1.0"
+        "description": "Agents Bar compatible Agent entity",
+        "version": "0.1.1"
     },
     "paths": {
         "/agent": {
-            "post": {
-                "summary": "Create Agent",
-                "operationId": "create_agent_agent_post",
-                "parameters": [
-                    {
-                        "required": true,
-                        "schema": {
-                            "title": "Model Type",
-                            "type": "string"
-                        },
-                        "name": "model_type",
-                        "in": "query"
-                    },
-                    {
-                        "required": true,
-                        "schema": {
-                            "title": "Obs Size",
-                            "type": "integer"
-                        },
-                        "name": "obs_size",
-                        "in": "query"
-                    },
-                    {
-                        "required": true,
-                        "schema": {
-                            "title": "Action Size",
-                            "type": "integer"
-                        },
-                        "name": "action_size",
-                        "in": "query"
-                    },
-                    {
-                        "required": false,
-                        "schema": {
-                            "title": "Network State",
-                            "type": "string",
-                            "format": "binary"
-                        },
-                        "name": "network_state",
-                        "in": "query"
-                    },
-                    {
-                        "required": false,
-                        "schema": {
-                            "title": "Buffer State",
-                            "type": "string",
-                            "format": "binary"
-                        },
-                        "name": "buffer_state",
-                        "in": "query"
+            "get": {
+                "summary": "Api Get Agent Info",
+                "description": "Describes agent.\n\nProvides summary information of the agent.\nThe method should be relatively light.",
+                "operationId": "api_get_agent_info_agent_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AgentInfo"
+                                }
+                            }
+                        }
                     }
-                ],
+                }
+            },
+            "post": {
+                "summary": "Api Post Agent",
+                "description": "Create agent.\n\nThe agent is reused by other methods. There is no \"update\" method to agent's interal state\nso in case it needs changes it should be deleted and recreated.",
+                "operationId": "api_post_agent_agent_post",
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
-                                "title": "Model Config",
-                                "type": "object",
-                                "additionalProperties": {
-                                    "type": "string"
-                                }
+                                "$ref": "#/components/schemas/AgentCreate"
                             }
                         }
                     },
@@ -96,9 +62,9 @@
         },
         "/agent/{agent_name}": {
             "delete": {
-                "summary": "Delete Agent",
-                "description": "Assumption is that the service contains only one agent.",
-                "operationId": "delete_agent_agent__agent_name__delete",
+                "summary": "Api Delete Agent",
+                "description": "Deletes agent and all related attribute. A hard reset.\n\nAgent name (reference) is necessary to prevent accidental deletion.",
+                "operationId": "api_delete_agent_agent__agent_name__delete",
                 "parameters": [
                     {
                         "required": true,
@@ -129,8 +95,9 @@
         },
         "/agent/state": {
             "get": {
-                "summary": "Get Agent State",
-                "operationId": "get_agent_state_agent_state_get",
+                "summary": "Api Get Agent State",
+                "description": "Retruns agent's state.\n\nThe state should be sufficient to fully describe and reconstruct the agent.\nIt might be that in some situations the reconstructed agent doesn't produce\nthe exact same output, e.g. due to internal randomness, but statistically\nthey need to be the same.",
+                "operationId": "api_get_agent_state_agent_state_get",
                 "responses": {
                     "200": {
                         "description": "Successful Response",
@@ -145,35 +112,18 @@
                 }
             }
         },
-        "/agent/": {
-            "get": {
-                "summary": "Get Agent Info",
-                "operationId": "get_agent_info_agent__get",
-                "responses": {
-                    "200": {
-                        "description": "Successful Response",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/AgentInfo"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/agent/last_active": {
             "get": {
-                "summary": "Get Agent Last Active",
-                "operationId": "get_agent_last_active_agent_last_active_get",
+                "summary": "Api Get Agent Last Active",
+                "description": "Returns timestamp of agent's latest usage.",
+                "operationId": "api_get_agent_last_active_agent_last_active_get",
                 "responses": {
                     "200": {
                         "description": "Successful Response",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "title": "Response Get Agent Last Active Agent Last Active Get",
+                                    "title": "Response Api Get Agent Last Active Agent Last Active Get",
                                     "type": "string",
                                     "format": "date-time"
                                 }
@@ -185,8 +135,9 @@
         },
         "/agent/hparams": {
             "get": {
-                "summary": "Get Agent Hparasm",
-                "operationId": "get_agent_hparasm_agent_hparams_get",
+                "summary": "Api Get Agent Hparasm",
+                "description": "Returns hashmap of agent's hyperparameters.",
+                "operationId": "api_get_agent_hparasm_agent_hparams_get",
                 "responses": {
                     "200": {
                         "description": "Successful Response",
@@ -201,8 +152,9 @@
         },
         "/agent/loss": {
             "get": {
-                "summary": "Get Agent Loss",
-                "operationId": "get_agent_loss_agent_loss_get",
+                "summary": "Api Get Agent Loss",
+                "description": "Returns agent's loss values.\n\nBy default it only returns the most recent metrics, i.e. single timestamp.\nMax timestamp values is based on the agent's intialization.",
+                "operationId": "api_get_agent_loss_agent_loss_get",
                 "parameters": [
                     {
                         "required": false,
@@ -221,7 +173,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "title": "Response Get Agent Loss Agent Loss Get",
+                                    "title": "Response Api Get Agent Loss Agent Loss Get",
                                     "type": "array",
                                     "items": {
                                         "type": "object",
@@ -248,8 +200,21 @@
         },
         "/agent/step": {
             "post": {
-                "summary": "Agent Step",
-                "operationId": "agent_step_agent_step_post",
+                "summary": "Api Post Agent Step",
+                "description": "Feed agent with step information.\n\nThe minimum required is the current state and reward.\nSome agents, for convinience, might also require passing last action,\nauxilary infrmation whether state is terminal (done) and the next state.\n\nBy default, the Step is committed to the agent in the request.\nIn case it's needed to delay committing, e.g. gathering all information first,\none can use `/agent/commit` method.",
+                "operationId": "api_post_agent_step_agent_step_post",
+                "parameters": [
+                    {
+                        "required": false,
+                        "schema": {
+                            "title": "Commit",
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "name": "commit",
+                        "in": "query"
+                    }
+                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -282,10 +247,28 @@
                 }
             }
         },
+        "/agent/commit": {
+            "post": {
+                "summary": "Api Post Agent Commit",
+                "description": "Commits submitted step into Agent.\n\nBefore using this method the data needs to be submitted using `/agent/step`.",
+                "operationId": "api_post_agent_commit_agent_commit_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/agent/act": {
             "post": {
-                "summary": "Agent Act",
-                "operationId": "agent_act_agent_act_post",
+                "summary": "Api Post Agent Act",
+                "description": "Infers action based on provided observation.\n\n    ",
+                "operationId": "api_post_agent_act_agent_act_post",
                 "parameters": [
                     {
                         "required": false,
@@ -303,10 +286,20 @@
                         "application/json": {
                             "schema": {
                                 "title": "State",
-                                "type": "array",
-                                "items": {
-                                    "type": "number"
-                                }
+                                "anyOf": [
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "number"
+                                        }
+                                    }
+                                ]
                             }
                         }
                     },
@@ -371,12 +364,48 @@
                     }
                 }
             },
+            "AgentCreate": {
+                "title": "AgentCreate",
+                "required": [
+                    "model_type",
+                    "obs_space",
+                    "action_space"
+                ],
+                "type": "object",
+                "properties": {
+                    "model_type": {
+                        "title": "Model Type",
+                        "type": "string"
+                    },
+                    "obs_space": {
+                        "$ref": "#/components/schemas/DataSpace"
+                    },
+                    "action_space": {
+                        "$ref": "#/components/schemas/DataSpace"
+                    },
+                    "model_config": {
+                        "title": "Model Config",
+                        "type": "object"
+                    },
+                    "network_state": {
+                        "title": "Network State",
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "buffer_state": {
+                        "title": "Buffer State",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                }
+            },
             "AgentInfo": {
                 "title": "AgentInfo",
                 "required": [
                     "model",
                     "hyperparameters",
-                    "last_active"
+                    "last_active",
+                    "discret"
                 ],
                 "type": "object",
                 "properties": {
@@ -392,6 +421,10 @@
                         "title": "Last Active",
                         "type": "string",
                         "format": "date-time"
+                    },
+                    "discret": {
+                        "title": "Discret",
+                        "type": "boolean"
                     }
                 }
             },
@@ -413,11 +446,11 @@
                     },
                     "state_space": {
                         "title": "State Space",
-                        "type": "integer"
+                        "type": "object"
                     },
                     "action_space": {
                         "title": "Action Space",
-                        "type": "integer"
+                        "type": "object"
                     },
                     "encoded_config": {
                         "title": "Encoded Config",
@@ -446,10 +479,20 @@
                 "properties": {
                     "obs": {
                         "title": "Obs",
-                        "type": "array",
-                        "items": {
-                            "type": "number"
-                        }
+                        "anyOf": [
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer"
+                                }
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        ]
                     },
                     "action": {
                         "title": "Action",
@@ -460,10 +503,20 @@
                     },
                     "next_obs": {
                         "title": "Next Obs",
-                        "type": "array",
-                        "items": {
-                            "type": "number"
-                        }
+                        "anyOf": [
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer"
+                                }
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        ]
                     },
                     "reward": {
                         "title": "Reward",
@@ -472,6 +525,55 @@
                     "done": {
                         "title": "Done",
                         "type": "boolean"
+                    }
+                }
+            },
+            "DataSpace": {
+                "title": "DataSpace",
+                "required": [
+                    "dtype",
+                    "shape"
+                ],
+                "type": "object",
+                "properties": {
+                    "dtype": {
+                        "title": "Dtype",
+                        "type": "string"
+                    },
+                    "shape": {
+                        "title": "Shape",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "low": {
+                        "title": "Low",
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        ]
+                    },
+                    "high": {
+                        "title": "High",
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "number"
+                                }
+                            }
+                        ]
                     }
                 }
             },

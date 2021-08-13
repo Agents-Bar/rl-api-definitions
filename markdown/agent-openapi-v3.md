@@ -1,5 +1,5 @@
 ---
-title: Agents Bar - Agent v0.1.0
+title: Agents Bar - Agent v0.1.1
 language_tabs:
   - shell: Shell
   - http: HTTP
@@ -19,28 +19,203 @@ headingLevel: 2
 
 <!-- Generator: Widdershins v4.0.1 -->
 
-<h1 id="agents-bar-agent">Agents Bar - Agent v0.1.0</h1>
+<h1 id="agents-bar-agent">Agents Bar - Agent v0.1.1</h1>
 
 > Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
 
+Agents Bar compatible Agent entity
+
 <h1 id="agents-bar-agent-default">Default</h1>
 
-## create_agent_agent_post
+## api_get_agent_info_agent_get
 
-<a id="opIdcreate_agent_agent_post"></a>
+<a id="opIdapi_get_agent_info_agent_get"></a>
 
 > Code samples
 
 ```shell
 # You can also use wget
-curl -X POST /agent?model_type=string&obs_size=0&action_size=0 \
+curl -X GET /agent \
+  -H 'Accept: application/json'
+
+```
+
+```http
+GET /agent HTTP/1.1
+
+Accept: application/json
+
+```
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/agent',
+{
+  method: 'GET',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Accept' => 'application/json'
+}
+
+result = RestClient.get '/agent',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json'
+}
+
+r = requests.get('/agent', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Accept' => 'application/json',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('GET','/agent', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/agent");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("GET");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("GET", "/agent", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`GET /agent`
+
+*Api Get Agent Info*
+
+Describes agent.
+
+Provides summary information of the agent.
+The method should be relatively light.
+
+> Example responses
+
+> 200 Response
+
+```json
+{
+  "model": "string",
+  "hyperparameters": {},
+  "last_active": "2019-08-24T14:15:22Z",
+  "discret": true
+}
+```
+
+<h3 id="api_get_agent_info_agent_get-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Successful Response|[AgentInfo](#schemaagentinfo)|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## api_post_agent_agent_post
+
+<a id="opIdapi_post_agent_agent_post"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /agent \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json'
 
 ```
 
 ```http
-POST /agent?model_type=string&obs_size=0&action_size=0 HTTP/1.1
+POST /agent HTTP/1.1
 
 Content-Type: application/json
 Accept: application/json
@@ -49,15 +224,33 @@ Accept: application/json
 
 ```javascript
 const inputBody = '{
-  "property1": "string",
-  "property2": "string"
+  "model_type": "string",
+  "obs_space": {
+    "dtype": "string",
+    "shape": [
+      0
+    ],
+    "low": 0,
+    "high": 0
+  },
+  "action_space": {
+    "dtype": "string",
+    "shape": [
+      0
+    ],
+    "low": 0,
+    "high": 0
+  },
+  "model_config": {},
+  "network_state": "string",
+  "buffer_state": "string"
 }';
 const headers = {
   'Content-Type':'application/json',
   'Accept':'application/json'
 };
 
-fetch('/agent?model_type=string&obs_size=0&action_size=0',
+fetch('/agent',
 {
   method: 'POST',
   body: inputBody,
@@ -82,10 +275,7 @@ headers = {
 
 result = RestClient.post '/agent',
   params: {
-  'model_type' => 'string',
-'obs_size' => 'integer',
-'action_size' => 'integer'
-}, headers: headers
+  }, headers: headers
 
 p JSON.parse(result)
 
@@ -98,9 +288,7 @@ headers = {
   'Accept': 'application/json'
 }
 
-r = requests.post('/agent', params={
-  'model_type': 'string',  'obs_size': '0',  'action_size': '0'
-}, headers = headers)
+r = requests.post('/agent', headers = headers)
 
 print(r.json())
 
@@ -139,7 +327,7 @@ try {
 ```
 
 ```java
-URL obj = new URL("/agent?model_type=string&obs_size=0&action_size=0");
+URL obj = new URL("/agent");
 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 con.setRequestMethod("POST");
 int responseCode = con.getResponseCode();
@@ -183,28 +371,45 @@ func main() {
 
 `POST /agent`
 
-*Create Agent*
+*Api Post Agent*
+
+Create agent.
+
+The agent is reused by other methods. There is no "update" method to agent's interal state
+so in case it needs changes it should be deleted and recreated.
 
 > Body parameter
 
 ```json
 {
-  "property1": "string",
-  "property2": "string"
+  "model_type": "string",
+  "obs_space": {
+    "dtype": "string",
+    "shape": [
+      0
+    ],
+    "low": 0,
+    "high": 0
+  },
+  "action_space": {
+    "dtype": "string",
+    "shape": [
+      0
+    ],
+    "low": 0,
+    "high": 0
+  },
+  "model_config": {},
+  "network_state": "string",
+  "buffer_state": "string"
 }
 ```
 
-<h3 id="create_agent_agent_post-parameters">Parameters</h3>
+<h3 id="api_post_agent_agent_post-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|model_type|query|string|true|none|
-|obs_size|query|integer|true|none|
-|action_size|query|integer|true|none|
-|network_state|query|string(binary)|false|none|
-|buffer_state|query|string(binary)|false|none|
-|body|body|object|true|none|
-|» **additionalProperties**|body|string|false|none|
+|body|body|[AgentCreate](#schemaagentcreate)|true|none|
 
 > Example responses
 
@@ -214,22 +419,22 @@ func main() {
 null
 ```
 
-<h3 id="create_agent_agent_post-responses">Responses</h3>
+<h3 id="api_post_agent_agent_post-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Successful Response|Inline|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Validation Error|[HTTPValidationError](#schemahttpvalidationerror)|
 
-<h3 id="create_agent_agent_post-responseschema">Response Schema</h3>
+<h3 id="api_post_agent_agent_post-responseschema">Response Schema</h3>
 
 <aside class="success">
 This operation does not require authentication
 </aside>
 
-## delete_agent_agent__agent_name__delete
+## api_delete_agent_agent__agent_name__delete
 
-<a id="opIddelete_agent_agent__agent_name__delete"></a>
+<a id="opIdapi_delete_agent_agent__agent_name__delete"></a>
 
 > Code samples
 
@@ -370,11 +575,13 @@ func main() {
 
 `DELETE /agent/{agent_name}`
 
-*Delete Agent*
+*Api Delete Agent*
 
-Assumption is that the service contains only one agent.
+Deletes agent and all related attribute. A hard reset.
 
-<h3 id="delete_agent_agent__agent_name__delete-parameters">Parameters</h3>
+Agent name (reference) is necessary to prevent accidental deletion.
+
+<h3 id="api_delete_agent_agent__agent_name__delete-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
@@ -398,7 +605,7 @@ Assumption is that the service contains only one agent.
 }
 ```
 
-<h3 id="delete_agent_agent__agent_name__delete-responses">Responses</h3>
+<h3 id="api_delete_agent_agent__agent_name__delete-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -409,9 +616,9 @@ Assumption is that the service contains only one agent.
 This operation does not require authentication
 </aside>
 
-## get_agent_state_agent_state_get
+## api_get_agent_state_agent_state_get
 
-<a id="opIdget_agent_state_agent_state_get"></a>
+<a id="opIdapi_get_agent_state_agent_state_get"></a>
 
 > Code samples
 
@@ -552,7 +759,14 @@ func main() {
 
 `GET /agent/state`
 
-*Get Agent State*
+*Api Get Agent State*
+
+Retruns agent's state.
+
+The state should be sufficient to fully describe and reconstruct the agent.
+It might be that in some situations the reconstructed agent doesn't produce
+the exact same output, e.g. due to internal randomness, but statistically
+they need to be the same.
 
 > Example responses
 
@@ -561,15 +775,15 @@ func main() {
 ```json
 {
   "model": "string",
-  "state_space": 0,
-  "action_space": 0,
+  "state_space": {},
+  "action_space": {},
   "encoded_config": "string",
   "encoded_network": "string",
   "encoded_buffer": "string"
 }
 ```
 
-<h3 id="get_agent_state_agent_state_get-responses">Responses</h3>
+<h3 id="api_get_agent_state_agent_state_get-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -579,176 +793,9 @@ func main() {
 This operation does not require authentication
 </aside>
 
-## get_agent_info_agent__get
+## api_get_agent_last_active_agent_last_active_get
 
-<a id="opIdget_agent_info_agent__get"></a>
-
-> Code samples
-
-```shell
-# You can also use wget
-curl -X GET /agent/ \
-  -H 'Accept: application/json'
-
-```
-
-```http
-GET /agent/ HTTP/1.1
-
-Accept: application/json
-
-```
-
-```javascript
-
-const headers = {
-  'Accept':'application/json'
-};
-
-fetch('/agent/',
-{
-  method: 'GET',
-
-  headers: headers
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
-
-```
-
-```ruby
-require 'rest-client'
-require 'json'
-
-headers = {
-  'Accept' => 'application/json'
-}
-
-result = RestClient.get '/agent/',
-  params: {
-  }, headers: headers
-
-p JSON.parse(result)
-
-```
-
-```python
-import requests
-headers = {
-  'Accept': 'application/json'
-}
-
-r = requests.get('/agent/', headers = headers)
-
-print(r.json())
-
-```
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-$headers = array(
-    'Accept' => 'application/json',
-);
-
-$client = new \GuzzleHttp\Client();
-
-// Define array of request body.
-$request_body = array();
-
-try {
-    $response = $client->request('GET','/agent/', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
-
- // ...
-
-```
-
-```java
-URL obj = new URL("/agent/");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("GET");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
-
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    headers := map[string][]string{
-        "Accept": []string{"application/json"},
-    }
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "/agent/", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`GET /agent/`
-
-*Get Agent Info*
-
-> Example responses
-
-> 200 Response
-
-```json
-{
-  "model": "string",
-  "hyperparameters": {},
-  "last_active": "2019-08-24T14:15:22Z"
-}
-```
-
-<h3 id="get_agent_info_agent__get-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Successful Response|[AgentInfo](#schemaagentinfo)|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
-## get_agent_last_active_agent_last_active_get
-
-<a id="opIdget_agent_last_active_agent_last_active_get"></a>
+<a id="opIdapi_get_agent_last_active_agent_last_active_get"></a>
 
 > Code samples
 
@@ -889,7 +936,9 @@ func main() {
 
 `GET /agent/last_active`
 
-*Get Agent Last Active*
+*Api Get Agent Last Active*
+
+Returns timestamp of agent's latest usage.
 
 > Example responses
 
@@ -899,7 +948,7 @@ func main() {
 "2019-08-24T14:15:22Z"
 ```
 
-<h3 id="get_agent_last_active_agent_last_active_get-responses">Responses</h3>
+<h3 id="api_get_agent_last_active_agent_last_active_get-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -909,9 +958,9 @@ func main() {
 This operation does not require authentication
 </aside>
 
-## get_agent_hparasm_agent_hparams_get
+## api_get_agent_hparasm_agent_hparams_get
 
-<a id="opIdget_agent_hparasm_agent_hparams_get"></a>
+<a id="opIdapi_get_agent_hparasm_agent_hparams_get"></a>
 
 > Code samples
 
@@ -1052,7 +1101,9 @@ func main() {
 
 `GET /agent/hparams`
 
-*Get Agent Hparasm*
+*Api Get Agent Hparasm*
+
+Returns hashmap of agent's hyperparameters.
 
 > Example responses
 
@@ -1062,21 +1113,21 @@ func main() {
 null
 ```
 
-<h3 id="get_agent_hparasm_agent_hparams_get-responses">Responses</h3>
+<h3 id="api_get_agent_hparasm_agent_hparams_get-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Successful Response|Inline|
 
-<h3 id="get_agent_hparasm_agent_hparams_get-responseschema">Response Schema</h3>
+<h3 id="api_get_agent_hparasm_agent_hparams_get-responseschema">Response Schema</h3>
 
 <aside class="success">
 This operation does not require authentication
 </aside>
 
-## get_agent_loss_agent_loss_get
+## api_get_agent_loss_agent_loss_get
 
-<a id="opIdget_agent_loss_agent_loss_get"></a>
+<a id="opIdapi_get_agent_loss_agent_loss_get"></a>
 
 > Code samples
 
@@ -1217,9 +1268,14 @@ func main() {
 
 `GET /agent/loss`
 
-*Get Agent Loss*
+*Api Get Agent Loss*
 
-<h3 id="get_agent_loss_agent_loss_get-parameters">Parameters</h3>
+Returns agent's loss values.
+
+By default it only returns the most recent metrics, i.e. single timestamp.
+Max timestamp values is based on the agent's intialization.
+
+<h3 id="api_get_agent_loss_agent_loss_get-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
@@ -1238,31 +1294,31 @@ func main() {
 ]
 ```
 
-<h3 id="get_agent_loss_agent_loss_get-responses">Responses</h3>
+<h3 id="api_get_agent_loss_agent_loss_get-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Successful Response|Inline|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Validation Error|[HTTPValidationError](#schemahttpvalidationerror)|
 
-<h3 id="get_agent_loss_agent_loss_get-responseschema">Response Schema</h3>
+<h3 id="api_get_agent_loss_agent_loss_get-responseschema">Response Schema</h3>
 
 Status Code **200**
 
-*Response Get Agent Loss Agent Loss Get*
+*Response Api Get Agent Loss Agent Loss Get*
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|Response Get Agent Loss Agent Loss Get|[object]|false|none|none|
+|Response Api Get Agent Loss Agent Loss Get|[object]|false|none|none|
 |» **additionalProperties**|number|false|none|none|
 
 <aside class="success">
 This operation does not require authentication
 </aside>
 
-## agent_step_agent_step_post
+## api_post_agent_step_agent_step_post
 
-<a id="opIdagent_step_agent_step_post"></a>
+<a id="opIdapi_post_agent_step_agent_step_post"></a>
 
 > Code samples
 
@@ -1422,7 +1478,17 @@ func main() {
 
 `POST /agent/step`
 
-*Agent Step*
+*Api Post Agent Step*
+
+Feed agent with step information.
+
+The minimum required is the current state and reward.
+Some agents, for convinience, might also require passing last action,
+auxilary infrmation whether state is terminal (done) and the next state.
+
+By default, the Step is committed to the agent in the request.
+In case it's needed to delay committing, e.g. gathering all information first,
+one can use `/agent/commit` method.
 
 > Body parameter
 
@@ -1442,10 +1508,11 @@ func main() {
 }
 ```
 
-<h3 id="agent_step_agent_step_post-parameters">Parameters</h3>
+<h3 id="api_post_agent_step_agent_step_post-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
+|commit|query|boolean|false|none|
 |body|body|[AgentStep](#schemaagentstep)|true|none|
 
 > Example responses
@@ -1456,22 +1523,191 @@ func main() {
 null
 ```
 
-<h3 id="agent_step_agent_step_post-responses">Responses</h3>
+<h3 id="api_post_agent_step_agent_step_post-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Successful Response|Inline|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Validation Error|[HTTPValidationError](#schemahttpvalidationerror)|
 
-<h3 id="agent_step_agent_step_post-responseschema">Response Schema</h3>
+<h3 id="api_post_agent_step_agent_step_post-responseschema">Response Schema</h3>
 
 <aside class="success">
 This operation does not require authentication
 </aside>
 
-## agent_act_agent_act_post
+## api_post_agent_commit_agent_commit_post
 
-<a id="opIdagent_act_agent_act_post"></a>
+<a id="opIdapi_post_agent_commit_agent_commit_post"></a>
+
+> Code samples
+
+```shell
+# You can also use wget
+curl -X POST /agent/commit \
+  -H 'Accept: application/json'
+
+```
+
+```http
+POST /agent/commit HTTP/1.1
+
+Accept: application/json
+
+```
+
+```javascript
+
+const headers = {
+  'Accept':'application/json'
+};
+
+fetch('/agent/commit',
+{
+  method: 'POST',
+
+  headers: headers
+})
+.then(function(res) {
+    return res.json();
+}).then(function(body) {
+    console.log(body);
+});
+
+```
+
+```ruby
+require 'rest-client'
+require 'json'
+
+headers = {
+  'Accept' => 'application/json'
+}
+
+result = RestClient.post '/agent/commit',
+  params: {
+  }, headers: headers
+
+p JSON.parse(result)
+
+```
+
+```python
+import requests
+headers = {
+  'Accept': 'application/json'
+}
+
+r = requests.post('/agent/commit', headers = headers)
+
+print(r.json())
+
+```
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$headers = array(
+    'Accept' => 'application/json',
+);
+
+$client = new \GuzzleHttp\Client();
+
+// Define array of request body.
+$request_body = array();
+
+try {
+    $response = $client->request('POST','/agent/commit', array(
+        'headers' => $headers,
+        'json' => $request_body,
+       )
+    );
+    print_r($response->getBody()->getContents());
+ }
+ catch (\GuzzleHttp\Exception\BadResponseException $e) {
+    // handle exception or api errors.
+    print_r($e->getMessage());
+ }
+
+ // ...
+
+```
+
+```java
+URL obj = new URL("/agent/commit");
+HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+con.setRequestMethod("POST");
+int responseCode = con.getResponseCode();
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(con.getInputStream()));
+String inputLine;
+StringBuffer response = new StringBuffer();
+while ((inputLine = in.readLine()) != null) {
+    response.append(inputLine);
+}
+in.close();
+System.out.println(response.toString());
+
+```
+
+```go
+package main
+
+import (
+       "bytes"
+       "net/http"
+)
+
+func main() {
+
+    headers := map[string][]string{
+        "Accept": []string{"application/json"},
+    }
+
+    data := bytes.NewBuffer([]byte{jsonReq})
+    req, err := http.NewRequest("POST", "/agent/commit", data)
+    req.Header = headers
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    // ...
+}
+
+```
+
+`POST /agent/commit`
+
+*Api Post Agent Commit*
+
+Commits submitted step into Agent.
+
+Before using this method the data needs to be submitted using `/agent/step`.
+
+> Example responses
+
+> 200 Response
+
+```json
+null
+```
+
+<h3 id="api_post_agent_commit_agent_commit_post-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Successful Response|Inline|
+
+<h3 id="api_post_agent_commit_agent_commit_post-responseschema">Response Schema</h3>
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
+## api_post_agent_act_agent_act_post
+
+<a id="opIdapi_post_agent_act_agent_act_post"></a>
 
 > Code samples
 
@@ -1621,7 +1857,11 @@ func main() {
 
 `POST /agent/act`
 
-*Agent Act*
+*Api Post Agent Act*
+
+Infers action based on provided observation.
+
+    
 
 > Body parameter
 
@@ -1631,12 +1871,12 @@ func main() {
 ]
 ```
 
-<h3 id="agent_act_agent_act_post-parameters">Parameters</h3>
+<h3 id="api_post_agent_act_agent_act_post-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |noise|query|number|false|none|
-|body|body|array[number]|true|none|
+|body|body|any|true|none|
 
 > Example responses
 
@@ -1648,7 +1888,7 @@ func main() {
 }
 ```
 
-<h3 id="agent_act_agent_act_post-responses">Responses</h3>
+<h3 id="api_post_agent_act_agent_act_post-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -1707,6 +1947,52 @@ or
 |---|---|---|---|---|
 |» *anonymous*|[number]|false|none|none|
 
+<h2 id="tocS_AgentCreate">AgentCreate</h2>
+<!-- backwards compatibility -->
+<a id="schemaagentcreate"></a>
+<a id="schema_AgentCreate"></a>
+<a id="tocSagentcreate"></a>
+<a id="tocsagentcreate"></a>
+
+```json
+{
+  "model_type": "string",
+  "obs_space": {
+    "dtype": "string",
+    "shape": [
+      0
+    ],
+    "low": 0,
+    "high": 0
+  },
+  "action_space": {
+    "dtype": "string",
+    "shape": [
+      0
+    ],
+    "low": 0,
+    "high": 0
+  },
+  "model_config": {},
+  "network_state": "string",
+  "buffer_state": "string"
+}
+
+```
+
+AgentCreate
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|model_type|string|true|none|none|
+|obs_space|[DataSpace](#schemadataspace)|true|none|none|
+|action_space|[DataSpace](#schemadataspace)|true|none|none|
+|model_config|object|false|none|none|
+|network_state|string(binary)|false|none|none|
+|buffer_state|string(binary)|false|none|none|
+
 <h2 id="tocS_AgentInfo">AgentInfo</h2>
 <!-- backwards compatibility -->
 <a id="schemaagentinfo"></a>
@@ -1718,7 +2004,8 @@ or
 {
   "model": "string",
   "hyperparameters": {},
-  "last_active": "2019-08-24T14:15:22Z"
+  "last_active": "2019-08-24T14:15:22Z",
+  "discret": true
 }
 
 ```
@@ -1732,6 +2019,7 @@ AgentInfo
 |model|string|true|none|none|
 |hyperparameters|object|true|none|none|
 |last_active|string(date-time)|true|none|none|
+|discret|boolean|true|none|none|
 
 <h2 id="tocS_AgentStateJSON">AgentStateJSON</h2>
 <!-- backwards compatibility -->
@@ -1743,8 +2031,8 @@ AgentInfo
 ```json
 {
   "model": "string",
-  "state_space": 0,
-  "action_space": 0,
+  "state_space": {},
+  "action_space": {},
   "encoded_config": "string",
   "encoded_network": "string",
   "encoded_buffer": "string"
@@ -1759,8 +2047,8 @@ AgentStateJSON
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |model|string|true|none|none|
-|state_space|integer|true|none|none|
-|action_space|integer|true|none|none|
+|state_space|object|true|none|none|
+|action_space|object|true|none|none|
 |encoded_config|string|true|none|none|
 |encoded_network|string|true|none|none|
 |encoded_buffer|string|true|none|none|
@@ -1795,11 +2083,104 @@ AgentStep
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|obs|[number]|true|none|none|
+|obs|any|true|none|none|
+
+anyOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[integer]|false|none|none|
+
+or
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[number]|false|none|none|
+
+continued
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
 |action|[number]|true|none|none|
-|next_obs|[number]|true|none|none|
+|next_obs|any|true|none|none|
+
+anyOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[integer]|false|none|none|
+
+or
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[number]|false|none|none|
+
+continued
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
 |reward|number|true|none|none|
 |done|boolean|true|none|none|
+
+<h2 id="tocS_DataSpace">DataSpace</h2>
+<!-- backwards compatibility -->
+<a id="schemadataspace"></a>
+<a id="schema_DataSpace"></a>
+<a id="tocSdataspace"></a>
+<a id="tocsdataspace"></a>
+
+```json
+{
+  "dtype": "string",
+  "shape": [
+    0
+  ],
+  "low": 0,
+  "high": 0
+}
+
+```
+
+DataSpace
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|dtype|string|true|none|none|
+|shape|[integer]|true|none|none|
+|low|any|false|none|none|
+
+anyOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|number|false|none|none|
+
+or
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[number]|false|none|none|
+
+continued
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|high|any|false|none|none|
+
+anyOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|number|false|none|none|
+
+or
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|» *anonymous*|[number]|false|none|none|
 
 <h2 id="tocS_HTTPValidationError">HTTPValidationError</h2>
 <!-- backwards compatibility -->

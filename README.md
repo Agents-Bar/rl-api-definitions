@@ -29,3 +29,15 @@ The environment is not limited to the simulation that generates agent's surround
 Depending on the paradigm, environment can include all "other" agents.
 
 Environment may or may not be able to ascribe value function.
+
+# Development
+
+## Convert JSON to markdown
+
+JSON to Markdown conversion is done using Mermade's [widdershins](https://github.com/Mermade/widdershins).
+Currently there isn't any fancy conversion so once you install, just execute `widdershins` in console with
+input/output arguments, for example
+
+```
+$ widdershins json/agent-openapi-v3.json markdown/agent-openapi-v3.md
+```
